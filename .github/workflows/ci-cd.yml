@@ -20,7 +20,7 @@ jobs:
         run: |
           docker create --name dist-container tic-tac-toe
           docker cp dist-container:/dist ./dist
-          docker rm extracdist-container
+          docker rm dist-container
 
       - name: Deploy to GitHub Pages
         if: github.ref == 'refs/heads/master'
