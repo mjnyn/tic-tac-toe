@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tic Tac Toe</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Tic Tac Toe</h1>
+    <div id="game-info">
+      <p id="current-player">Current Player: X</p>
+      <p id="game-status"></p>
+    </div>
+    <div id="game-board"></div>
+    <button id="reset-btn">Reset Game</button>
+  </div>
+
+  <script type="module">
+    import TicTacToe from './src/game.js';
+
+    const game = new TicTacToe();
+    const gameBoard = document.getElementById('game-board');
+    const currentPlayerInfo = document.getElementById('current-player');
+    const gameStatus = document.getElementById('game-status');
+    const resetBtn = document.getElementById('reset-btn');
+
+    function handleCellClick(index) {
+      if (game.makeMove(index)) {
+        renderBoard();
+        updateGameInfo();
+      }
+    }
+
+    function renderBoard() {
+      gameBoard.innerHTML = '';
+      const board = game.getBoard();
+      board.forEach((cell, index) => {
+        const cellElement = document.createElement('div');
+        cellElement.className = 'cell';
+        cellElement.dataset.index = index;
+        if (cell) {
+          cellElement.textContent = cell;
+          cellElement.classList.add(cell === 'X' ? 'X' : 'O');
+        }
+        cellElement.addEventListener('click', () => handleCellClick(index));
+        gameBoard.appendChild(cellElement);
+      });
+    }
+
+    function updateGameInfo() {
+      currentPlayerInfo.textContent = `Current Player: ${game.getCurrentPlayer()}`;
+      const result = game.checkResult();
+
+      if (result) {
+        if (result.winner) {
+          gameStatus.textContent = `Player ${result.winner} wins!`;
+          highlightWinningCells(result.winningCells);
+        } else {
+          gameStatus.textContent = 'Game ended in a tie!';
+        }
+      } else {
+        gameStatus.textContent = '';
+      }
+    }
+
+    function highlightWinningCells(cells) {
+      const boardCells = gameBoard.querySelectorAll('.cell');
+      cells.forEach(index => {
+        boardCells[index].classList.add('winning');
+      });
+    }
+
+    resetBtn.addEventListener('click', () => {
+      game.reset();
+      renderBoard();
+      updateGameInfo();
+      gameStatus.textContent = '';
+      gameBoard.querySelectorAll('.cell').forEach(cell => {
+        cell.classList.remove('winning');
+      });
+    });
+
+    renderBoard();
+    updateGameInfo();
+  </script>
+</body>
+</html>
