@@ -1,0 +1,10 @@
+services:
+  tic-tac-toe:
+    build:
+      context: .
+      target: builder
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+    command: npm start
