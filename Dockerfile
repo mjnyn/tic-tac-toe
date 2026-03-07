@@ -16,3 +16,5 @@ RUN npm run build
 FROM scratch AS artifact
 
 COPY --from=builder /app/dist /dist
+
+CMD ["echo", "Docker image built successfully"]
