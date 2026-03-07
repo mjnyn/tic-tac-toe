@@ -19,7 +19,7 @@ jobs:
       - name: Extract build artifact
         run: |
           docker create --name dist-container tic-tac-toe
-          docker cp dist-container:/dist ./dist
+          docker cp dist-container:/app/dist ./dist
           docker rm dist-container
 
       - name: Deploy to GitHub Pages
@@ -28,3 +28,4 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist
+          force_orphan: true
