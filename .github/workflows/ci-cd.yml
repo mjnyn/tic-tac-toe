@@ -13,14 +13,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Build Docker image (runs tests)
-        run: docker build -t tic-tac-toe .
-
-      - name: Extract build artifact
-        run: |
-          docker create --name dist-container tic-tac-toe
-          docker cp dist-container:/app/dist ./dist
-          docker rm dist-container
+      - name: Build and export dist
+        run: docker build --target artifact --output type=local,dest=dist .
 
       - name: Deploy to GitHub Pages
         if: github.ref == 'refs/heads/master'
